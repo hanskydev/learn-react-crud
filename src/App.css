@@ -1,38 +1,120 @@
-.App {
-  text-align: center;
+/* Layout and Component Styles */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background-color: #fff;
+    z-index: 1000;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.header h1 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 64px;
+    margin-left: 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 64px;
+    width: 160px;
+    bottom: 0;
+    background-color: #fff;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.sidebar h3 {
+    margin-left: 16px;
 }
 
-.App-link {
-  color: #61dafb;
+.sidebar .p-menu {
+    border: 0;
+    width: 160px;
+    position: relative;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.login-panel {
+    width: 260px;
+    padding: 32px;
+    background-color: #fff;
+    border-radius: 16px;
+    text-align: center;
+    margin: 32px auto;
+}
+
+.content {
+    margin-left: 160px;
+    padding-top: 64px;
+}
+
+.content-inner {
+    margin: 16px;
+}
+
+.content-header {
+    margin-bottom: 16px;
+}
+
+.content-form {
+    padding: 32px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.form-label {
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+.my-progress-bar {
+    z-index: 10000;
+    height: 4px !important;
+}
+
+.cell-link {
+    text-decoration: none;
+    color: #2478dd;
+    font-weight: 600;
+}
+
+.cell-link:hover {
+    text-decoration: underline;
+}
+
+.detail-label {
+    width: 160px;
+}
+
+.content-detail {
+    padding: 32px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.image-display-wrapper {
+    width: 256px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.image-display {
+    max-width: 100%;
+}
+
+.icon-display.pi {
+    font-size: 128px;
+    display: inline-block;
+    color: #2478dd;
+}
+
+.footer {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
