@@ -1,8 +1,14 @@
+// Axios
 import axios from "axios";
-import { APP_BASE_URL } from "../configs/constants";
+
+// Auth Manager
+import { getTokenFromLocalStorage, getRefreshTokenFromLocalStorage } from "../auth/useAuth";
+
+// Configs
+import { API_BASE_URL } from "../configs/constants";
 
 const instance = axios.create({
-    baseURL: APP_BASE_URL,
+    baseURL: API_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -10,9 +16,9 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user && user.token) {
-            config.headers["Authorization"] = `Bearer ${user.token}`;
+        const token = getTokenFromLocalStorage();
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
         }
         return config;
     },
@@ -32,9 +38,9 @@ instance.interceptors.response.use(
             if (err.response.status === 401 && !originalConfig._retry) {
                 originalConfig._retry = true;
                 try {
-                    const user = JSON.parse(localStorage.getItem("user"));
+                    const refreshToken = getRefreshTokenFromLocalStorage();
                     const rs = await instance.post("/auth/refreshToken", {
-                        refreshToken: user.refreshToken,
+                        refreshToken,
                     });
 
                     localStorage.setItem("user", JSON.stringify(rs.data));

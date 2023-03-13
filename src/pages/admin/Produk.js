@@ -1,19 +1,28 @@
+// React
+import React, { useEffect, useState } from "react";
+
+// React Router
+import { Link } from "react-router-dom";
+
+// Services
+import { findAllProduk } from "../../services/ProdukService";
+
+// Layout
+import Main from "../../layout/Main";
+
+// PrimeReact Components
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import React, { useEffect, useState } from "react";
-import Main from "../../layout/Main";
-import { findAllProduk } from "../../services/ProdukService";
-import { Link } from "react-router-dom";
 import { Button } from "primereact/button";
 
 const Produk = () => {
-    const [produks, setProduks] = useState([]);
+    const [produk, setProduk] = useState([]);
 
     useEffect(() => {
         const load = async () => {
             try {
                 const response = await findAllProduk();
-                setProduks(response.data);
+                setProduk(response.data);
             } catch (error) {
                 console.error(error);
             }
@@ -45,7 +54,7 @@ const Produk = () => {
                         </div>
                         <div className="content-body">
                             <div className="content-data shadow-1">
-                                <DataTable value={produks} size="small" className="table-view" stripedRows>
+                                <DataTable value={produk} size="small" className="table-view" stripedRows>
                                     <Column field="nama" header="Nama Produk" body={namaBodyTemplate} />
                                     <Column field="kategori.nama" header="Kategori" />
                                     <Column field="harga" header="Harga" style={{ width: "100px" }} />

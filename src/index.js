@@ -1,23 +1,21 @@
+// React
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+
+// Components
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-
-//theme
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-
-//core
-import "primereact/resources/primereact.min.css";
-
-//icons
-import "primeicons/primeicons.css";
-
-//primeflex
-import "primeflex/primeflex.css";
-
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./auth/useAuth";
+
+// Styles
+import "./index.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import "primeflex/primeflex.css";
+
+// Performance
+import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

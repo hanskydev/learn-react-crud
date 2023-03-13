@@ -1,6 +1,13 @@
+// React
 import React, { useEffect, useState } from "react";
-import Main from "../../layout/Main";
+
+// Services
 import { createKategori, deleteKategoriById, findAllKategori, updateKategori } from "../../services/KategoriService";
+
+// Layout
+import Main from "../../layout/Main";
+
+// PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";

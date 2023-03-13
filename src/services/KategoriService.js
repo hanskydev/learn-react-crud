@@ -1,3 +1,4 @@
+// API
 import api from "./api";
 
 export const findAllKategori = async () => {

@@ -1,4 +1,4 @@
-import React from "react";
+// Layout
 import Main from "../../layout/Main";
 
 const DashboardUser = () => {

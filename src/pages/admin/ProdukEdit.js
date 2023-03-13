@@ -1,39 +1,42 @@
+// React
 import React, { useEffect, useState } from "react";
-import Main from "../../layout/Main";
+
+// React Router
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { findAllKategori } from "../../services/KategoriService";
-import { findProdukById, updateProduk } from "../../services/ProdukService";
+import { findProdukById, updateProduk, getImage, uploadImage } from "../../services/ProdukService";
+
+// Layout
+import Main from "../../layout/Main";
+
+// PrimeReact Components
 import { ProgressBar } from "primereact/progressbar";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { APP_BASE_URL } from "../../configs/constants";
 import { FileUpload } from "primereact/fileupload";
 
 const ProdukEdit = () => {
-    const [produk, setProduk] = useState();
-    const [kategoris, setKategoris] = useState([]);
+    const token = getTokenFromLocalStorage();
+    const [produk, setProduk] = useState({});
+    const [kategori, setKategori] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submited, setSubmited] = useState(false);
-
-    const navigate = useNavigate();
-
     const [img, setImg] = useState();
 
+    const navigate = useNavigate();
     const { id } = useParams();
 
     useEffect(() => {
         const loadKategori = async () => {
             try {
                 const response = await findAllKategori();
-                setKategoris(response.data);
+                setKategori(response.data);
             } catch (error) {
                 console.error(error);
             }
         };
-
-        loadKategori();
 
         const loadProduk = async () => {
             try {
@@ -49,9 +52,9 @@ const ProdukEdit = () => {
             }
         };
 
+        loadKategori();
         loadProduk();
-        // eslint-disable-next-line
-    }, [id]);
+    }, [id, token]);
 
     const saveProduk = async () => {
         try {
@@ -82,18 +85,41 @@ const ProdukEdit = () => {
     };
 
     const onUpload = async (event) => {
-        const [file] = event.files;
-        const imageObjectURL = URL.createObjectURL(file);
-        setImg(imageObjectURL);
-        const response = JSON.parse(event.xhr.response);
-        const _produk = produk;
-        _produk.gambar = response.fileName;
+        try {
+            const [file] = event.files;
+            const imageObjectURL = URL.createObjectURL(file);
+            setImg(imageObjectURL);
+
+            const response = await uploadImage(file, token);
+            setProduk((prev) => ({
+                ...prev,
+                gambar: response.fileName,
+            }));
+        } catch (error) {
+            console.error("Error uploading file:", error);
+        }
     };
 
-    const onBeforeSend = async (event) => {
-        if (user && user.token) {
-            event.xhr.setRequestHeader("Authorization", "Bearer " + user.token);
+    const onBeforeSend = (event) => {
+        if (token) {
+            event.xhr.setRequestHeader("Authorization", "Bearer " + token);
         }
+    };
+
+    const handleInputChange = (e, field) => {
+        const value = e.target.value || "";
+        setProduk((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    const handleDropdownChange = (e) => {
+        const value = e.target.value || null;
+        setProduk((prev) => ({
+            ...prev,
+            kategori: { id: value },
+        }));
     };
 
     return (
@@ -112,20 +138,15 @@ const ProdukEdit = () => {
                                     <div className="flex">
                                         <div className="flex-grow-1">
                                             <div className="p-fluid mb-4">
-                                                <div className="p-filed mb-3">
+                                                <div className="p-field mb-3">
                                                     <label htmlFor="nama" className="form-label">
                                                         Nama
                                                     </label>
                                                     <InputText
-                                                        value={produk.nama}
+                                                        value={produk.nama || ""}
                                                         placeholder="Ketik nama produk"
                                                         id="nama"
-                                                        onChange={(e) => {
-                                                            const val = (e.target && e.target.value) || "";
-                                                            const _produk = { ...produk };
-                                                            _produk.nama = val;
-                                                            setProduk(_produk);
-                                                        }}
+                                                        onChange={(e) => handleInputChange(e, "nama")}
                                                     />
                                                     {submited && !produk.nama && (
                                                         <span className="p-error">Nama produk tidak boleh kosong</span>
@@ -140,72 +161,52 @@ const ProdukEdit = () => {
                                                         optionLabel="nama"
                                                         optionValue="id"
                                                         id="kategori"
-                                                        value={produk.kategori.id}
-                                                        options={kategoris}
+                                                        value={produk.kategori?.id || ""}
+                                                        options={kategori}
                                                         placeholder="Pilih kategori"
-                                                        onChange={(e) => {
-                                                            const val = (e.target && e.target.value) || null;
-                                                            const _produk = { ...produk };
-                                                            _produk.kategori.id = val;
-                                                            setProduk(_produk);
-                                                        }}
+                                                        onChange={handleDropdownChange}
                                                     />
-                                                    {submited && !produk.kategori.id && (
+                                                    {submited && !produk.kategori?.id && (
                                                         <span className="p-error">Kategori produk harus dipilih</span>
                                                     )}
                                                 </div>
 
-                                                <div className="p-filed mb-3">
+                                                <div className="p-field mb-3">
                                                     <label htmlFor="deskripsi" className="form-label">
                                                         Deskripsi
                                                     </label>
                                                     <InputText
-                                                        value={produk.deskripsi}
+                                                        value={produk.deskripsi || ""}
                                                         placeholder="Ketik deskripsi produk"
                                                         id="deskripsi"
-                                                        onChange={(e) => {
-                                                            const val = (e.target && e.target.value) || "";
-                                                            const _produk = { ...produk };
-                                                            _produk.deskripsi = val;
-                                                            setProduk(_produk);
-                                                        }}
+                                                        onChange={(e) => handleInputChange(e, "deskripsi")}
                                                     />
                                                 </div>
 
-                                                <div className="p-filed mb-3">
+                                                <div className="p-field mb-3">
                                                     <label htmlFor="harga" className="form-label">
                                                         Harga
                                                     </label>
                                                     <InputText
-                                                        value={produk.harga}
+                                                        value={produk.harga || ""}
                                                         placeholder="Ketik harga produk"
                                                         id="harga"
-                                                        onChange={(e) => {
-                                                            const val = (e.target && e.target.value) || "";
-                                                            const _produk = { ...produk };
-                                                            _produk.harga = val;
-                                                            setProduk(_produk);
-                                                        }}
+                                                        onChange={(e) => handleInputChange(e, "harga")}
                                                     />
                                                     {submited && !produk.harga && (
                                                         <span className="p-error">Harga produk tidak boleh kosong</span>
                                                     )}
                                                 </div>
 
-                                                <div className="p-filed mb-3">
+                                                <div className="p-field mb-3">
                                                     <label htmlFor="stok" className="form-label">
                                                         Stok
                                                     </label>
                                                     <InputText
-                                                        value={produk.stok}
+                                                        value={produk.stok || ""}
                                                         placeholder="Ketik stok produk"
                                                         id="stok"
-                                                        onChange={(e) => {
-                                                            const val = (e.target && e.target.value) || "";
-                                                            const _produk = { ...produk };
-                                                            _produk.stok = val;
-                                                            setProduk(_produk);
-                                                        }}
+                                                        onChange={(e) => handleInputChange(e, "stok")}
                                                     />
                                                     {submited && !produk.stok && (
                                                         <span className="p-error">Stok produk tidak boleh kosong</span>
@@ -227,13 +228,12 @@ const ProdukEdit = () => {
                                             </div>
                                             <FileUpload
                                                 name="file"
-                                                url={`${APP_BASE_URL}/api/uploadImage`}
-                                                auto
                                                 accept="image/*"
                                                 onUpload={onUpload}
                                                 onBeforeSend={onBeforeSend}
                                                 chooseLabel="Pilih Gambar"
                                                 mode="basic"
+                                                auto
                                             />
                                         </div>
                                     </div>

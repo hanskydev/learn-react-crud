@@ -1,12 +1,13 @@
+// React
 import React, { useEffect, useState } from "react";
-import Main from "../../layout/Main";
+
+// React Router
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { deleteProdukById, findProdukById } from "../../services/ProdukService";
 import { ProgressBar } from "primereact/progressbar";
 import { Button } from "primereact/button";
 import { ConfirmDialog } from "primereact/confirmdialog";
-import { APP_BASE_URL } from "../../configs/constants";
 
 const ProdukDetail = () => {
     const [produk, setProduk] = useState();
@@ -15,7 +16,6 @@ const ProdukDetail = () => {
     const [delDialog, setDelDialog] = useState(false);
 
     const navigate = useNavigate();
-
     const [img, setImg] = useState();
 
     useEffect(() => {
@@ -34,7 +34,6 @@ const ProdukDetail = () => {
         };
 
         loadProduk();
-        // eslint-disable-next-line
     }, [id]);
 
     const user = JSON.parse(localStorage.getItem("user"));

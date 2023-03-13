@@ -1,4 +1,7 @@
+// React Router
 import { Navigate } from "react-router-dom";
+
+// Auth Manager
 import { useAuth } from "../auth/useAuth";
 
 export const ProtectedRoute = ({ userRole, children }) => {

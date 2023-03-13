@@ -1,18 +1,24 @@
-// import logo from "./logo.svg";
+// Styles
 import "./App.css";
+
+// React Router
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/admin/Dashboard";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+
+// Pages
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Forbidden from "./pages/Forbidden";
+import Dashboard from "./pages/admin/Dashboard";
 import DashboardUser from "./pages/user/DashboardUser";
-import Forbidden from "./components/Forbidden";
 import Kategori from "./pages/admin/Kategori";
 import Produk from "./pages/admin/Produk";
 import ProdukCreate from "./pages/admin/ProdukCreate";
 import ProdukDetail from "./pages/admin/ProdukDetail";
 import ProdukEdit from "./pages/admin/ProdukEdit";
+
+// Components
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const App = () => {
     return (

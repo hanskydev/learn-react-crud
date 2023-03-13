@@ -1,4 +1,4 @@
-import React from "react";
+// Auth Manager
 import { useAuth } from "../auth/useAuth";
 
 const Header = () => {

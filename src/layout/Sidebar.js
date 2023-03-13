@@ -1,56 +1,42 @@
+// React
 import React from "react";
 
+// React Router
 import { Link } from "react-router-dom";
-import { Menu } from "primereact/menu";
+
+// Auth Manager
 import { useAuth } from "../auth/useAuth";
+
+// PrimeReact Components
+import { Menu } from "primereact/menu";
 
 const Sidebar = () => {
     const { signout, user } = useAuth();
 
+    const createMenuItem = (label, icon, to, command) => ({
+        label,
+        icon,
+        template: (item, options) => (
+            <Link to={to} className={options.className}>
+                <span className={options.iconClassName}></span>
+                <span className={options.labelClassName}>{item.label}</span>
+            </Link>
+        ),
+        command,
+    });
+
     const userMenus = [
-        {
-            label: "Dashboard",
-            icon: "pi pi-th-large",
-            template: dashboardUserTemplate,
-        },
-        {
-            label: "Sign Out",
-            icon: "pi pi-sign-out",
-            command: () => signout(),
-        },
+        createMenuItem("Dashboard", "pi pi-th-large", "/user/dashboard"),
+        { label: "Sign Out", icon: "pi pi-sign-out", command: () => signout() },
     ];
 
     const adminMenus = [
-        {
-            label: "Dashboard",
-            icon: "pi pi-th-large",
-            template: dashboardTemplate,
-        },
-        {
-            label: "Pesanan",
-            icon: "pi pi-shopping-cart",
-            template: pesananTemplate,
-        },
-        {
-            label: "Kategori",
-            icon: "pi pi-tags",
-            template: kategoriTemplate,
-        },
-        {
-            label: "Produk",
-            icon: "pi pi-box",
-            template: produkTemplate,
-        },
-        {
-            label: "Pengguna",
-            icon: "pi pi-users",
-            template: penggunaTemplate,
-        },
-        {
-            label: "Sign Out",
-            icon: "pi pi-sign-out",
-            command: () => signout(),
-        },
+        createMenuItem("Dashboard", "pi pi-th-large", "/admin/dashboard"),
+        createMenuItem("Pesanan", "pi pi-shopping-cart", "/admin/pesanan"),
+        createMenuItem("Kategori", "pi pi-tags", "/admin/kategori"),
+        createMenuItem("Produk", "pi pi-box", "/admin/produk"),
+        createMenuItem("Pengguna", "pi pi-users", "/admin/pengguna"),
+        { label: "Sign Out", icon: "pi pi-sign-out", command: () => signout() },
     ];
 
     return (
@@ -58,61 +44,6 @@ const Sidebar = () => {
             <h3>Sidebar</h3>
             <Menu model={user.role === "admin" ? adminMenus : userMenus} />
         </div>
-    );
-};
-
-// Define the template functions outside of the Sidebar component
-const dashboardTemplate = (item, options) => {
-    return (
-        <Link to="/admin/dashboard" className={options.className}>
-            <span className={options.iconClassName}></span>
-            <span className={options.labelClassName}>{item.label}</span>
-        </Link>
-    );
-};
-
-const pesananTemplate = (item, options) => {
-    return (
-        <Link to="/admin/pesanan" className={options.className}>
-            <span className={options.iconClassName}></span>
-            <span className={options.labelClassName}>{item.label}</span>
-        </Link>
-    );
-};
-
-const kategoriTemplate = (item, options) => {
-    return (
-        <Link to="/admin/kategori" className={options.className}>
-            <span className={options.iconClassName}></span>
-            <span className={options.labelClassName}>{item.label}</span>
-        </Link>
-    );
-};
-
-const produkTemplate = (item, options) => {
-    return (
-        <Link to="/admin/produk" className={options.className}>
-            <span className={options.iconClassName}></span>
-            <span className={options.labelClassName}>{item.label}</span>
-        </Link>
-    );
-};
-
-const penggunaTemplate = (item, options) => {
-    return (
-        <Link to="/admin/pengguna" className={options.className}>
-            <span className={options.iconClassName}></span>
-            <span className={options.labelClassName}>{item.label}</span>
-        </Link>
-    );
-};
-
-const dashboardUserTemplate = (item, options) => {
-    return (
-        <Link to="/user/dashboard" className={options.className}>
-            <span className={options.iconClassName}></span>
-            <span className={options.labelClassName}>{item.label}</span>
-        </Link>
     );
 };
 
